@@ -5,7 +5,7 @@ const healthRouter = require('./routes/health');
 const readyRouter = require('./routes/ready');
 const metricsRouter = require('./routes/metrics');
 const productsRouter = require('./routes/products');
-const recommendRouter = require('./routes/recommend');
+const compareRouter = require('./routes/compare');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +17,7 @@ app.use('/health', healthRouter);
 app.use('/ready', readyRouter);
 app.use('/metrics', metricsRouter);
 app.use('/products', productsRouter);
-app.use('/compare', recommendRouter);
+app.use('/compare', compareRouter);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudcompare
+  namespace: cloudcompare
+  labels:
+    app: cloudcompare
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cloudcompare
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: cloudcompare
+    spec:
+      containers:
+        - name: cloudcompare
+          image: REGISTRY_PLACEHOLDER/cloudcompare:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: cloudcompare-config
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3

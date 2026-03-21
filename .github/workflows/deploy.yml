@@ -1,0 +1,41 @@
+name: Build and Deploy CloudCompare
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Login to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 600
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.REGISTRY_URL }}/cloudcompare:latest .
+
+      - name: Push Docker image to DOCR
+        run: docker push ${{ secrets.REGISTRY_URL }}/cloudcompare:latest
+
+      - name: Save DOKS kubeconfig
+        run: doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_NAME }}
+
+      - name: Deploy to DOKS
+        run: |
+          kubectl apply -f k8s/configmap.yaml
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/hpa.yaml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/cloudcompare -n cloudcompare
