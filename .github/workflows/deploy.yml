@@ -22,13 +22,13 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.REGISTRY_URL }}/cloudcompare:latest .
+        run: docker build -t registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest .
 
       - name: Push Docker image to DOCR
-        run: docker push ${{ secrets.REGISTRY_URL }}/cloudcompare:latest
+        run: docker push registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest
 
       - name: Save DOKS kubeconfig
-        run: doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_NAME }}
+        run: doctl kubernetes cluster kubeconfig save cloudcompare-cluster
 
       - name: Deploy to DOKS
         run: |

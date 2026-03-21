@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: cloudcompare
-          image: REGISTRY_PLACEHOLDER/cloudcompare:latest
+          image: registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest
           ports:
             - containerPort: 3000
           envFrom:
