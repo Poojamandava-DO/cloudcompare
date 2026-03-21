@@ -301,6 +301,5 @@ Verify rollout success
 
 **Pooja Mandava**
 Sr. Technical Account Manager
-[GitHub](https://github.com/Poojamandava-DO) · [LinkedIn](https://linkedin.com/in/poojamandava)
 
 *Deployed on DigitalOcean Kubernetes as part of Senior TAM interview assignment.*
