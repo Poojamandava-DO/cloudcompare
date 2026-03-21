@@ -7,7 +7,7 @@ A production-grade SaaS application deployed on DigitalOcean Kubernetes (DOKS) t
 ---
 
 ## Table of Contents
-- [Architecture](#architecture)
+- [Deployment Flow](#deployment-flow)
 - [Prerequisites](#prerequisites)
 - [Step 1: Build and Push Docker Image](#step-1-build-and-push-docker-image)
 - [Step 2: Create DOKS Cluster](#step-2-create-doks-cluster)
@@ -23,26 +23,26 @@ A production-grade SaaS application deployed on DigitalOcean Kubernetes (DOKS) t
 
 ---
 
-## Architecture
+## Deployment Flow
 ```
-Developer → GitHub → GitHub Actions (CI/CD)
-                          ↓
-               DigitalOcean Container Registry (DOCR)
-               # Private registry — images never exposed publicly
-                          ↓
-               DigitalOcean Kubernetes (DOKS)
-               # Managed control plane — free on DO, $73/month on EKS
-                     2 nodes · NYC3
-                          ↓
-          DigitalOcean Load Balancer (138.197.62.176)
-          # Distributes traffic evenly across all healthy pods
-                          ↓
-          Kubernetes Deployment
-          ├── Min 3 pods  # High availability — 1 down, 2 still serve
-          ├── Max 10 pods # Cost protection — never over-provision
-          └── HPA @ 60%  # Auto scale before pods get overwhelmed
+Developer
+↓
+GitHub Repository (Source Code)
+↓
+GitHub Actions (CI/CD Pipeline — triggered on every push to main)
+↓
+Docker Image Build and Push (DigitalOcean Container Registry)
+↓
+DOKS Cluster (Deployment via YAML)
+↓
+Kubernetes Deployment → 3 Pods running CloudCompare (Node.js)
+↓
+Horizontal Pod Autoscaler (scales pods 3→10 based on CPU @ 60%)
+↓
+Kubernetes Service (LoadBalancer)
+↓
+User accesses via EXTERNAL-IP (138.197.62.176)
 ```
-
 ---
 
 ## Prerequisites
