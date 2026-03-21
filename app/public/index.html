@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CloudCompare — DigitalOcean vs AWS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #333; }
+    header { background: #0069ff; color: white; padding: 24px 40px; }
+    header h1 { font-size: 28px; font-weight: 700; }
+    header p { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    .card { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin-bottom: 24px; }
+    h2 { font-size: 18px; margin-bottom: 20px; color: #0069ff; }
+    .form-row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .form-group { flex: 1; min-width: 200px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #555; }
+    select { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; }
+    button { margin-top: 20px; width: 100%; padding: 14px; background: #0069ff; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+    button:hover { background: #0052cc; }
+    .results { display: none; }
+    .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .provider-card { border-radius: 10px; padding: 24px; }
+    .do-card { background: #e8f0ff; border: 2px solid #0069ff; }
+    .aws-card { background: #fff3e0; border: 2px solid #ff9900; }
+    .provider-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .do-card .provider-title { color: #0069ff; }
+    .aws-card .provider-title { color: #ff9900; }
+    .product-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 14px; }
+    .total-row { display: flex; justify-content: space-between; padding-top: 12px; font-weight: 700; font-size: 16px; }
+    .savings-banner { background: #e6f9f0; border: 2px solid #00c87a; border-radius: 10px; padding: 20px 24px; text-align: center; }
+    .savings-banner h3 { color: #00a362; font-size: 22px; }
+    .savings-banner p { color: #555; font-size: 14px; margin-top: 6px; }
+    .badge { display: inline-block; background: #00c87a; color: white; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 8px; }
+    .error { color: red; font-size: 14px; margin-top: 10px; display: none; }
+    .users-info { font-size: 13px; color: #777; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>☁️ CloudCompare</h1>
+    <p>DigitalOcean vs AWS — Find out how much you could save</p>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Compare Cloud Costs</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="workload">Workload Type</label>
+          <select id="workload">
+            <option value="web_app">Web Application</option>
+            <option value="static_site">Static Website</option>
+            <option value="ml_ai">ML / AI Workload</option>
+            <option value="microservices">Microservices API</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="tier">Scale / Tier</label>
+          <select id="tier">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="compare()">Compare Now →</button>
+      <p class="error" id="error">Something went wrong. Please try again.</p>
+    </div>
+
+    <div class="results" id="results">
+      <p class="users-info" id="usersInfo"></p>
+      <div class="comparison">
+        <div class="provider-card do-card">
+          <div class="provider-title">🌊 DigitalOcean</div>
+          <div id="doProducts"></div>
+          <div class="total-row">
+            <span>Monthly Total</span>
+            <span id="doTotal"></span>
+          </div>
+        </div>
+        <div class="provider-card aws-card">
+          <div class="provider-title">🟠 AWS</div>
+          <div id="awsProducts"></div>
+          <div class="total-row">
+            <span>Monthly Total</span>
+            <span id="awsTotal"></span>
+          </div>
+        </div>
+      </div>
+      <div class="savings-banner" style="margin-top: 20px;">
+        <h3 id="savingsAmount"></h3>
+        <p id="annualSavings"></p>
+        <div class="badge" id="savingsBadge"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function compare() {
+      const workload = document.getElementById('workload').value;
+      const tier = document.getElementById('tier').value;
+      const errorEl = document.getElementById('error');
+      const resultsEl = document.getElementById('results');
+      errorEl.style.display = 'none';
+      resultsEl.style.display = 'none';
+
+      try {
+        const res = await fetch('/compare', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workload, tier })
+        });
+        const data = await res.json();
+        if (!res.ok) { errorEl.style.display = 'block'; return; }
+
+        document.getElementById('usersInfo').textContent = `Showing comparison for: ${data.workload} — ${data.users}`;
+
+        document.getElementById('doProducts').innerHTML = data.digitalocean.products
+          .map(p => `<div class="product-item"><span>${p.name}</span><span>$${p.cost}/mo</span></div>`).join('');
+        document.getElementById('doTotal').textContent = data.digitalocean.total_monthly_cost + '/mo';
+
+        document.getElementById('awsProducts').innerHTML = data.aws.products
+          .map(p => `<div class="product-item"><span>${p.name}</span><span>$${p.cost}/mo</span></div>`).join('');
+        document.getElementById('awsTotal').textContent = data.aws.total_monthly_cost + '/mo';
+
+        document.getElementById('savingsAmount').textContent = `💰 Save ${data.savings.monthly_savings}/month with DigitalOcean`;
+        document.getElementById('annualSavings').textContent = `That's ${data.savings.annual_savings} saved every year`;
+        document.getElementById('savingsBadge').textContent = `${data.savings.percentage} cheaper than AWS`;
+
+        resultsEl.style.display = 'block';
+      } catch (e) {
+        errorEl.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+{
+  "workloads": [
+    {
+      "type": "web_app",
+      "label": "Web Application",
+      "tiers": {
+        "small": {
+          "users": "up to 1,000",
+          "digitalocean": {
+            "products": [
+              { "name": "Basic Droplet (1vCPU/1GB)", "cost": 6 },
+              { "name": "Managed PostgreSQL (1GB)", "cost": 15 },
+              { "name": "Load Balancer", "cost": 12 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EC2 t3.micro", "cost": 8 },
+              { "name": "RDS db.t3.micro", "cost": 25 },
+              { "name": "ALB", "cost": 22 }
+            ]
+          }
+        },
+        "medium": {
+          "users": "up to 10,000",
+          "digitalocean": {
+            "products": [
+              { "name": "DOKS (2 nodes)", "cost": 48 },
+              { "name": "Managed PostgreSQL (4GB)", "cost": 50 },
+              { "name": "Load Balancer", "cost": 12 },
+              { "name": "Spaces Object Storage", "cost": 5 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EKS (2 nodes)", "cost": 144 },
+              { "name": "RDS db.t3.medium", "cost": 98 },
+              { "name": "ALB", "cost": 22 },
+              { "name": "S3", "cost": 23 }
+            ]
+          }
+        },
+        "large": {
+          "users": "up to 100,000",
+          "digitalocean": {
+            "products": [
+              { "name": "DOKS (4 nodes)", "cost": 96 },
+              { "name": "Managed PostgreSQL (8GB)", "cost": 100 },
+              { "name": "Load Balancer", "cost": 12 },
+              { "name": "Spaces + CDN", "cost": 25 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EKS (4 nodes)", "cost": 288 },
+              { "name": "RDS db.t3.large", "cost": 195 },
+              { "name": "ALB", "cost": 22 },
+              { "name": "S3 + CloudFront", "cost": 85 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "static_site",
+      "label": "Static Website",
+      "tiers": {
+        "small": {
+          "users": "up to 10,000",
+          "digitalocean": {
+            "products": [
+              { "name": "App Platform (Starter)", "cost": 5 },
+              { "name": "Spaces + CDN", "cost": 5 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "Amplify Hosting", "cost": 15 },
+              { "name": "S3 + CloudFront", "cost": 25 }
+            ]
+          }
+        },
+        "medium": {
+          "users": "up to 100,000",
+          "digitalocean": {
+            "products": [
+              { "name": "App Platform (Basic)", "cost": 12 },
+              { "name": "Spaces + CDN", "cost": 10 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "Amplify Hosting", "cost": 35 },
+              { "name": "S3 + CloudFront", "cost": 55 }
+            ]
+          }
+        },
+        "large": {
+          "users": "up to 1,000,000",
+          "digitalocean": {
+            "products": [
+              { "name": "App Platform (Pro)", "cost": 25 },
+              { "name": "Spaces + CDN", "cost": 25 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "Amplify Hosting", "cost": 75 },
+              { "name": "S3 + CloudFront", "cost": 120 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "ml_ai",
+      "label": "ML / AI Workload",
+      "tiers": {
+        "small": {
+          "users": "development/testing",
+          "digitalocean": {
+            "products": [
+              { "name": "GPU Droplet (1x H100)", "cost": 175 },
+              { "name": "Spaces Object Storage", "cost": 5 },
+              { "name": "Managed PostgreSQL", "cost": 15 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EC2 p3.2xlarge", "cost": 550 },
+              { "name": "S3", "cost": 23 },
+              { "name": "RDS db.t3.micro", "cost": 25 }
+            ]
+          }
+        },
+        "medium": {
+          "users": "production inference",
+          "digitalocean": {
+            "products": [
+              { "name": "GPU Droplet (2x H100)", "cost": 350 },
+              { "name": "Spaces + CDN", "cost": 25 },
+              { "name": "Managed PostgreSQL (4GB)", "cost": 50 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EC2 p3.8xlarge", "cost": 2200 },
+              { "name": "S3 + CloudFront", "cost": 85 },
+              { "name": "RDS db.t3.medium", "cost": 98 }
+            ]
+          }
+        },
+        "large": {
+          "users": "large scale training",
+          "digitalocean": {
+            "products": [
+              { "name": "GPU Droplet (8x H100)", "cost": 1400 },
+              { "name": "Spaces + CDN", "cost": 50 },
+              { "name": "Managed PostgreSQL (8GB)", "cost": 100 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EC2 p3.16xlarge", "cost": 8800 },
+              { "name": "S3 + CloudFront", "cost": 150 },
+              { "name": "RDS db.t3.large", "cost": 195 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "microservices",
+      "label": "Microservices API",
+      "tiers": {
+        "small": {
+          "users": "up to 1,000",
+          "digitalocean": {
+            "products": [
+              { "name": "DOKS (2 nodes)", "cost": 48 },
+              { "name": "Managed PostgreSQL", "cost": 15 },
+              { "name": "Load Balancer", "cost": 12 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EKS (2 nodes)", "cost": 144 },
+              { "name": "RDS db.t3.micro", "cost": 25 },
+              { "name": "ALB", "cost": 22 }
+            ]
+          }
+        },
+        "medium": {
+          "users": "up to 50,000",
+          "digitalocean": {
+            "products": [
+              { "name": "DOKS (4 nodes)", "cost": 96 },
+              { "name": "Managed PostgreSQL (4GB)", "cost": 50 },
+              { "name": "Load Balancer", "cost": 12 },
+              { "name": "Managed Valkey (Redis)", "cost": 15 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EKS (4 nodes)", "cost": 288 },
+              { "name": "RDS db.t3.medium", "cost": 98 },
+              { "name": "ALB", "cost": 22 },
+              { "name": "ElastiCache", "cost": 50 }
+            ]
+          }
+        },
+        "large": {
+          "users": "up to 500,000",
+          "digitalocean": {
+            "products": [
+              { "name": "DOKS (8 nodes)", "cost": 192 },
+              { "name": "Managed PostgreSQL (8GB)", "cost": 100 },
+              { "name": "Load Balancer", "cost": 12 },
+              { "name": "Managed Valkey (Redis)", "cost": 30 },
+              { "name": "Spaces + CDN", "cost": 25 }
+            ]
+          },
+          "aws": {
+            "products": [
+              { "name": "EKS (8 nodes)", "cost": 576 },
+              { "name": "RDS db.t3.large", "cost": 195 },
+              { "name": "ALB", "cost": 22 },
+              { "name": "ElastiCache", "cost": 100 },
+              { "name": "S3 + CloudFront", "cost": 85 }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
