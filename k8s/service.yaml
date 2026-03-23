@@ -3,14 +3,11 @@ kind: Service
 metadata:
   name: cloudcompare-service
   namespace: cloudcompare
-  annotations:
-    service.beta.kubernetes.io/do-loadbalancer-name: "cloudcompare-lb"
-    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
 spec:
   type: LoadBalancer
   selector:
     app: cloudcompare
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
+  - protocol: TCP
+    port: 80
+    targetPort: 3000

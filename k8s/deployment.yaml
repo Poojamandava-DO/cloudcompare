@@ -6,7 +6,7 @@ metadata:
   labels:
     app: cloudcompare
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: cloudcompare
@@ -21,31 +21,31 @@ spec:
         app: cloudcompare
     spec:
       containers:
-        - name: cloudcompare
-          image: registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest
-          ports:
-            - containerPort: 3000
-          envFrom:
-            - configMapRef:
-                name: cloudcompare-config
-          resources:
-            requests:
-              cpu: "10m"
-              memory: "64Mi"
-            limits:
-              cpu: "100m"
-              memory: "128Mi"
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 3000
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 3000
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            failureThreshold: 3
+      - name: cloudcompare
+        image: registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: cloudcompare-config
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 3
