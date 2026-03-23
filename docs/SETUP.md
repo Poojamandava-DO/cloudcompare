@@ -232,11 +232,11 @@ kubectl apply -f k8s/hpa.yaml
 
 ---
 
-### Step 9: Install Metrics Server
+### Step 9: Verify Metrics Server
 
 Required for HPA to read CPU usage. Without it HPA shows `<unknown>`.
 ```bash
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get pods -n kube-system | grep metrics-server
 
 # Wait 2 minutes then verify
 kubectl get hpa -n cloudcompare
@@ -445,9 +445,9 @@ kubectl apply -f k8s/hpa.yaml
 
 ---
 
-### Step 9: Install Metrics Server
+### Step 9: Verify Metrics Server
 ```powershell
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get pods -n kube-system | grep metrics-server
 
 # Wait 2 minutes then verify
 kubectl get hpa -n cloudcompare
@@ -623,9 +623,9 @@ kubectl apply -f k8s/hpa.yaml
 
 ---
 
-### Step 9: Install Metrics Server
+### Step 9: Verify Metrics Server
 ```bash
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get pods -n kube-system | grep metrics-server
 
 # Wait 2 minutes then verify
 kubectl get hpa -n cloudcompare
@@ -706,7 +706,7 @@ kubectl rollout restart deployment/cloudcompare -n cloudcompare
 
 ### HPA showing unknown
 ```bash
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get pods -n kube-system | grep metrics-server
 # Wait 2 minutes
 kubectl get hpa -n cloudcompare
 ```

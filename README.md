@@ -13,7 +13,7 @@ A production-grade SaaS application deployed on DigitalOcean Kubernetes (DOKS) t
 - [Step 2: Create DOKS Cluster](#step-2-create-doks-cluster)
 - [Step 3: Connect Registry to DOKS](#step-3-connect-registry-to-doks)
 - [Step 4: Create Namespace and Deploy](#step-4-create-namespace-and-deploy)
-- [Step 5: Install Metrics Server](#step-5-install-metrics-server)
+- [Step 5: Verify Metrics Server](#step-5-verify-metrics-server)
 - [Step 6: Verify Deployment](#step-6-verify-deployment)
 - [Step 7: Load Testing](#step-7-load-testing)
 - [API Endpoints](#api-endpoints)
@@ -134,11 +134,11 @@ kubectl apply -f k8s/hpa.yaml
 
 ---
 
-## Step 5: Install Metrics Server
+## Step 5: Verify Metrics Server
 ```bash
-# HPA requires the metrics server to read CPU usage from pods
-# Without this, HPA shows <unknown> and cannot make scaling decisions
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+# DOKS comes with metrics-server pre-installed — no manual setup needed
+# Verify it is running:
+
 ```
 
 ---
