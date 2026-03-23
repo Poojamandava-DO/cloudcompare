@@ -161,7 +161,6 @@ kubectl get pods -n cloudcompare
 NAME                            READY   STATUS    RESTARTS   AGE
 cloudcompare-65cb59cc59-bg4jh   1/1     Running   0          14m
 cloudcompare-65cb59cc59-cv44m   1/1     Running   0          14m
-cloudcompare-65cb59cc59-ltmsp   1/1     Running   0          14m
 
 kubectl get hpa -n cloudcompare
 NAME               REFERENCE                 TARGETS       MINPODS   MAXPODS   REPLICAS
