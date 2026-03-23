@@ -122,13 +122,13 @@ kubectl patch serviceaccount default -n cloudcompare \
 # ConfigMap first — pods need environment variables before starting
 kubectl apply -f k8s/configmap.yaml
 
-# Deployment — runs 3 replicas with health probes and resource limits
+# Deployment — runs 2 replicas with health probes and resource limits
 kubectl apply -f k8s/deployment.yaml
 
 # Service — creates DigitalOcean Load Balancer with a public IP
 kubectl apply -f k8s/service.yaml
 
-# HPA — watches CPU and scales pods automatically between 3 and 10
+# HPA — watches CPU and scales pods automatically between 2 and 5
 kubectl apply -f k8s/hpa.yaml
 ```
 
@@ -145,7 +145,7 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 
 ## Step 6: Verify Deployment
 ```bash
-# All 3 pods should show 1/1 Running
+# All 2 pods should show 1/1 Running
 kubectl get pods -n cloudcompare
 
 # CPU target should show actual percentage, not <unknown>
@@ -165,7 +165,7 @@ cloudcompare-65cb59cc59-ltmsp   1/1     Running   0          14m
 
 kubectl get hpa -n cloudcompare
 NAME               REFERENCE                 TARGETS       MINPODS   MAXPODS   REPLICAS
-cloudcompare-hpa   Deployment/cloudcompare   cpu: 1%/60%   3         10        3
+cloudcompare-hpa   Deployment/cloudcompare   cpu: 1%/60%   2         5         2
 
 kubectl get services -n cloudcompare
 NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)
@@ -179,9 +179,9 @@ cloudcompare-service   LoadBalancer   10.108.61.174   138.197.62.176   80:31896/
 # Install k6 — open source load testing tool
 brew install k6
 
-# Run load test with 150 virtual users for 3 minutes
+# Run load test with 10 virtual users for 3 minutes
 # Simulates a real traffic spike to trigger HPA autoscaling
-k6 run --vus 150 --duration 3m k6-load-test.js
+k6 run --vus 10 --duration 3m k6-load-test.js
 ```
 
 ### Load Test Results
@@ -197,7 +197,7 @@ k6 run --vus 150 --duration 3m k6-load-test.js
 | HPA Scale Up | 2 → 5 pods automatically |
 | HPA Scale Down | 5 → 2 pods after load dropped |
 
-> HPA scaled from 2 to 5 pods automatically when CPU hit 115% — zero manual intervention required.
+> HPA scaled from 2 to 5 pods automatically when CPU hit 360% — zero manual intervention required.
 
 ---
 
@@ -289,7 +289,7 @@ Verify rollout success
 | Liveness probe `/health` | Checked every 10s, 3 failures = restart | Kubernetes auto-restarts crashed pods — self-healing |
 | Readiness probe `/ready` | Checked every 5s before receiving traffic | Prevents traffic hitting pods that aren't fully started |
 | HPA @ 60% CPU threshold | Scale up at 60%, not 80% or 90% | Gives Kubernetes 60-90s lead time to spin pods before saturation |
-| Min 2 replicas | Always 2 pods running | 1 pod crashes — 2 still serve traffic. Zero downtime. |
+| Min 2 replicas | Always 2 pods running | 1 pod crashes — 1 still serve traffic. Zero downtime. |
 | Rolling update strategy | maxSurge: 1, maxUnavailable: 0 | New pod ready before old one terminates — zero downtime deploys |
 | Private DOCR | Images in DO registry, not Docker Hub | Faster pulls (same network), no public exposure |
 | Namespace isolation | `cloudcompare` namespace | App resources isolated from Kubernetes system workloads |
