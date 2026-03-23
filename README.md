@@ -35,9 +35,9 @@ Docker Image Build and Push (DigitalOcean Container Registry)
 ↓
 DOKS Cluster (Deployment via YAML)
 ↓
-Kubernetes Deployment → 3 Pods running CloudCompare (Node.js)
+Kubernetes Deployment → 2 Pods running CloudCompare (Node.js)
 ↓
-Horizontal Pod Autoscaler (scales pods 3→10 based on CPU @ 60%)
+Horizontal Pod Autoscaler (scales pods 2→5 based on CPU @ 60%)
 ↓
 Kubernetes Service (LoadBalancer)
 ↓
@@ -81,11 +81,11 @@ docker buildx build --platform linux/amd64 \
 ### Option A: Using doctl (Recommended)
 ```bash
 # --wait blocks until cluster is fully ready before proceeding
-# s-2vcpu-2gb gives enough headroom for 3 pods with resource limits
+# s-1vcpu-2gb gives enough headroom for 3 pods with resource limits
 doctl kubernetes cluster create cloudcompare-cluster \
   --region nyc3 \
   --version latest \
-  --node-pool "name=cloudcompare-pool;size=s-2vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" \
+  --node-pool "name=cloudcompare-pool;size=s-1vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" \
   --wait
 ```
 
@@ -95,7 +95,7 @@ doctl kubernetes cluster create cloudcompare-cluster \
 3. Set:
    - Region: NYC3
    - Version: Latest stable
-   - Node Pool: s-2vcpu-2gb, Min 2, Max 3, Autoscaling enabled
+   - Node Pool: s-1vcpu-2gb, Min 2, Max 3, Autoscaling enabled
 4. Click **Create Cluster**
 
 ---
@@ -192,10 +192,10 @@ k6 run --vus 150 --duration 3m k6-load-test.js
 | Duration | 3 minutes |
 | Peak CPU | 115% |
 | Error Rate | 0% |
-| HPA Scale Up | 3 → 9 pods automatically |
-| HPA Scale Down | 9 → 3 pods after load dropped |
+| HPA Scale Up | 2 → 5 pods automatically |
+| HPA Scale Down | 5 → 2 pods after load dropped |
 
-> HPA scaled from 3 to 9 pods automatically when CPU hit 115% — zero manual intervention required.
+> HPA scaled from 2 to 5 pods automatically when CPU hit 115% — zero manual intervention required.
 
 ---
 
@@ -266,10 +266,10 @@ Verify rollout success
 
 | Resource | Monthly Cost | Notes |
 |----------|-------------|-------|
-| DOKS (2 nodes, s-2vcpu-2gb) | $36 | Control plane is free — saves $73/month vs EKS |
+| DOKS (2 nodes, s-1vcpu-2gb) | $24 | Control plane is free — saves $73/month vs EKS |
 | DigitalOcean Load Balancer | $12 | Included DDoS protection |
 | Container Registry | $5 | Private, co-located with DOKS |
-| **Total** | **$53/month** | |
+| **Total** | **$41/month** | |
 
 **AWS equivalent: ~$189/month — 72% more expensive**
 
@@ -287,7 +287,7 @@ Verify rollout success
 | Liveness probe `/health` | Checked every 10s, 3 failures = restart | Kubernetes auto-restarts crashed pods — self-healing |
 | Readiness probe `/ready` | Checked every 5s before receiving traffic | Prevents traffic hitting pods that aren't fully started |
 | HPA @ 60% CPU threshold | Scale up at 60%, not 80% or 90% | Gives Kubernetes 60-90s lead time to spin pods before saturation |
-| Min 3 replicas | Always 3 pods running | 1 pod crashes — 2 still serve traffic. Zero downtime. |
+| Min 2 replicas | Always 2 pods running | 1 pod crashes — 2 still serve traffic. Zero downtime. |
 | Rolling update strategy | maxSurge: 1, maxUnavailable: 0 | New pod ready before old one terminates — zero downtime deploys |
 | Private DOCR | Images in DO registry, not Docker Hub | Faster pulls (same network), no public exposure |
 | Namespace isolation | `cloudcompare` namespace | App resources isolated from Kubernetes system workloads |

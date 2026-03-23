@@ -12,7 +12,7 @@ This guide walks your team through deploying CloudCompare on DigitalOcean Kubern
 
 By the end of this guide your team will have:
 - A fully containerized Node.js application running on Kubernetes
-- A DigitalOcean Load Balancer distributing traffic across 3 pods
+- A DigitalOcean Load Balancer distributing traffic across 2 pods
 - Horizontal Pod Autoscaler automatically scaling based on CPU usage
 - A CI/CD pipeline that deploys every code change automatically
 - A private container registry storing your Docker images securely
@@ -31,9 +31,9 @@ Docker Image Build and Push (DigitalOcean Container Registry)
 ↓
 DOKS Cluster (Deployment via YAML)
 ↓
-Kubernetes Deployment → 3 Pods running CloudCompare (Node.js)
+Kubernetes Deployment → 2 Pods running CloudCompare (Node.js)
 ↓
-Horizontal Pod Autoscaler (scales pods 3→10 based on CPU @ 60%)
+Horizontal Pod Autoscaler (scales pods 2→5 based on CPU @ 60%)
 ↓
 Kubernetes Service (LoadBalancer)
 ↓
@@ -177,7 +177,7 @@ docker buildx build --platform linux/amd64 \
 doctl kubernetes cluster create cloudcompare-cluster \
   --region nyc3 \
   --version latest \
-  --node-pool "name=cloudcompare-pool;size=s-2vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" \
+  --node-pool "name=cloudcompare-pool;size=s-1vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" \
   --wait
 ```
 
@@ -187,7 +187,7 @@ doctl kubernetes cluster create cloudcompare-cluster \
 3. Configure:
    - Region: NYC3
    - Version: Latest stable
-   - Node Pool: s-2vcpu-2gb, Min 2, Max 3, Autoscaling enabled
+   - Node Pool: s-1vcpu-2gb, Min 2, Max 3, Autoscaling enabled
 4. Click **Create Cluster** and wait for provisioning
 ```bash
 # Connect kubectl to your cluster
@@ -245,7 +245,7 @@ kubectl get hpa -n cloudcompare
 **Expected Output:**
 ```
 NAME               TARGETS       MINPODS   MAXPODS   REPLICAS
-cloudcompare-hpa   cpu: 1%/60%   3         10        3
+cloudcompare-hpa   cpu: 1%/60%   2         5         2
 ```
 
 ---
@@ -413,7 +413,7 @@ docker push registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest
 doctl kubernetes cluster create cloudcompare-cluster `
   --region nyc3 `
   --version latest `
-  --node-pool "name=cloudcompare-pool;size=s-2vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" `
+  --node-pool "name=cloudcompare-pool;size=s-1vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" `
   --wait
 
 # Connect kubectl
@@ -591,7 +591,7 @@ docker push registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest
 doctl kubernetes cluster create cloudcompare-cluster \
   --region nyc3 \
   --version latest \
-  --node-pool "name=cloudcompare-pool;size=s-2vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" \
+  --node-pool "name=cloudcompare-pool;size=s-1vcpu-2gb;count=2;auto-scale=true;min-nodes=2;max-nodes=3" \
   --wait
 
 # Connect kubectl
@@ -675,12 +675,12 @@ kubectl get hpa -n cloudcompare --watch
 
 | Resource | Size | Monthly Cost |
 |----------|------|-------------|
-| DOKS (2 nodes) | s-2vcpu-2gb | $36 |
+| DOKS (2 nodes) | s-1vcpu-2gb | $36 |
 | Load Balancer | Standard | $12 |
 | Container Registry | Starter | $5 |
-| **Total** | | **$53/month** |
+| **Total** | | **$41/month** |
 
-**Cost Optimization:** Right-sizing to `s-1vcpu-1gb` nodes reduces total to **$29/month** based on actual usage of 1-3m CPU and 27-36Mi RAM per pod.
+**
 
 **AWS Equivalent: ~$189/month — 72% more expensive**
 
