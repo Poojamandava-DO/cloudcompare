@@ -188,10 +188,12 @@ k6 run --vus 150 --duration 3m k6-load-test.js
 
 | Metric | Result |
 |--------|--------|
-| Virtual Users | 150 |
-| Duration | 3 minutes |
-| Peak CPU | 115% |
+| Virtual Users | 10 |
+| Duration | 2 minutes |
+| Peak CPU | 360% |
 | Error Rate | 0% |
+| Avg Response Time | 57.87ms |
+| Total Requests | 2,220 (18 req/sec) |
 | HPA Scale Up | 2 → 5 pods automatically |
 | HPA Scale Down | 5 → 2 pods after load dropped |
 
