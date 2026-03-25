@@ -210,7 +210,7 @@ EXECUTION
 NETWORK
     data_received...............: 6.1 MB  70 kB/s
     data_sent...................: 184 kB  2.1 kB/s
-
+```
 
 | Metric | Result |
 |--------|--------|
