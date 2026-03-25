@@ -17,9 +17,10 @@ A production-grade SaaS application deployed on DigitalOcean Kubernetes (DOKS) t
 - [Step 6: Verify Deployment](#step-6-verify-deployment)
 - [Step 7: Load Testing](#step-7-load-testing)
 - [API Endpoints](#api-endpoints)
-- [CICD Pipeline](#cicd-pipeline)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Cost Analysis](#cost-analysis)
 - [Best Practices](#best-practices)
+- [Documentation](#documentation)
 
 ---
 
@@ -43,6 +44,7 @@ Kubernetes Service (LoadBalancer)
 ↓
 User accesses via EXTERNAL-IP (138.197.62.176)
 ```
+
 ---
 
 ## Prerequisites
@@ -138,7 +140,7 @@ kubectl apply -f k8s/hpa.yaml
 ```bash
 # DOKS comes with metrics-server pre-installed — no manual setup needed
 # Verify it is running:
-
+kubectl get deployment metrics-server -n kube-system
 ```
 
 ---
@@ -178,21 +180,47 @@ cloudcompare-service   LoadBalancer   10.108.61.174   138.197.62.176   80:31896/
 # Install k6 — open source load testing tool
 brew install k6
 
-# Run load test with 10 virtual users for 3 minutes
+# Run load test with 10 virtual users for 2 minutes
 # Simulates a real traffic spike to trigger HPA autoscaling
-k6 run --vus 10 --duration 3m k6-load-test.js
+k6 run --vus 10 --duration 2m k6-load-test.js
 ```
 
 ### Load Test Results
+
+```
+█ TOTAL RESULTS
+
+    checks_total........: 2313    26.696716/s
+    checks_succeeded....: 100.00% 2313 out of 2313
+    checks_failed.......: 0.00%   0 out of 2313
+
+    ✓ homepage status 200
+    ✓ compare status 200
+    ✓ savings returned
+
+HTTP
+    http_req_duration...........: avg=63.11ms  min=45.82ms  med=54.12ms  max=502.26ms  p(90)=100.01ms  p(95)=124.39ms
+    http_req_failed.............: 0.00%  0 out of 1542
+    http_reqs...................: 1542   17.797811/s
+
+EXECUTION
+    vus.........................: 10     min=10  max=10
+    iterations..................: 765    8.829653/s
+
+NETWORK
+    data_received...............: 6.1 MB  70 kB/s
+    data_sent...................: 184 kB  2.1 kB/s
+```
 
 | Metric | Result |
 |--------|--------|
 | Virtual Users | 10 |
 | Duration | 2 minutes |
-| Peak CPU | 360% |
+| Avg Response Time | 63.11ms |
+| p95 Response Time | 124.39ms |
 | Error Rate | 0% |
-| Avg Response Time | 57.87ms |
-| Total Requests | 2,220 (18 req/sec) |
+| Total Requests | 1,542 (17.8 req/sec) |
+| Peak CPU | 360% |
 | HPA Scale Up | 2 → 5 pods automatically |
 | HPA Scale Down | 5 → 2 pods after load dropped |
 
@@ -209,7 +237,6 @@ k6 run --vus 10 --duration 3m k6-load-test.js
 | GET | `/products` | List supported workloads | Users |
 | GET | `/health` | Liveness probe | Kubernetes |
 | GET | `/ready` | Readiness probe | Kubernetes |
-| GET | `/metrics` | App performance metrics | Monitoring |
 
 ### Example Request
 ```bash
@@ -265,14 +292,13 @@ Verify rollout success
 
 ## Cost Analysis
 
-| Resource | Monthly Cost | Notes |
-|----------|-------------|-------|
-| DOKS (2 nodes, s-1vcpu-2gb) | $24 | Control plane is free — saves $73/month vs EKS |
-| DigitalOcean Load Balancer | $12 | Included DDoS protection |
-| Container Registry | $5 | Private, co-located with DOKS |
-| **Total** | **$41/month** | |
-
-**AWS equivalent: ~$189/month — 72% more expensive**
+| Resource | DigitalOcean | AWS Equivalent | Savings |
+|----------|-------------|----------------|---------|
+| Kubernetes (2 nodes) | $24/mo | $144/mo (EKS) | $120/mo |
+| Load Balancer | $12/mo | $22/mo (ALB) | $10/mo |
+| Container Registry | $5/mo | $23/mo (ECR) | $18/mo |
+| Control Plane | Free | $73/mo | $73/mo |
+| **Total** | **$41/mo** | **$262/mo** | **$221/mo (84%)** |
 
 > HPA scales pods down during off-peak hours — you only pay for compute you actually use.
 
@@ -288,7 +314,7 @@ Verify rollout success
 | Liveness probe `/health` | Checked every 10s, 3 failures = restart | Kubernetes auto-restarts crashed pods — self-healing |
 | Readiness probe `/ready` | Checked every 5s before receiving traffic | Prevents traffic hitting pods that aren't fully started |
 | HPA @ 60% CPU threshold | Scale up at 60%, not 80% or 90% | Gives Kubernetes 60-90s lead time to spin pods before saturation |
-| Min 2 replicas | Always 2 pods running | 1 pod crashes — 1 still serve traffic. Zero downtime. |
+| Min 2 replicas | Always 2 pods running | 1 pod crashes — 1 still serves traffic. Zero downtime. |
 | Rolling update strategy | maxSurge: 1, maxUnavailable: 0 | New pod ready before old one terminates — zero downtime deploys |
 | Private DOCR | Images in DO registry, not Docker Hub | Faster pulls (same network), no public exposure |
 | Namespace isolation | `cloudcompare` namespace | App resources isolated from Kubernetes system workloads |
@@ -298,9 +324,15 @@ Verify rollout success
 
 ---
 
+## Documentation
+
+Full setup guide and QBR document are available in the `/docs` folder of this repository.
+
+---
+
 ## Author
 
 **Pooja Mandava**
 Sr. Technical Account Manager
 
-*Deployed on DigitalOcean Kubernetes as part of Senior TAM interview assignment.*
+*Deployed on DigitalOcean Kubernetes — production-grade SaaS infrastructure demonstration.*
