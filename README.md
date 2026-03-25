@@ -224,7 +224,7 @@ NETWORK
 | HPA Scale Up | 2 → 5 pods automatically |
 | HPA Scale Down | 5 → 2 pods after load dropped |
 
-> HPA scaled from 2 to 5 pods automatically when CPU hit 360% — zero manual intervention required.
+HPA scaled from 2 to 5 pods automatically when CPU hit 360% — zero manual intervention required.
 
 ---
 
@@ -300,7 +300,7 @@ Verify rollout success
 | Control Plane | Free | $73/mo | $73/mo |
 | **Total** | **$41/mo** | **$262/mo** | **$221/mo (84%)** |
 
-> HPA scales pods down during off-peak hours — you only pay for compute you actually use.
+HPA scales pods down during off-peak hours — you only pay for compute you actually use.
 
 ---
 
@@ -328,7 +328,7 @@ Verify rollout success
 
 Full setup guide and QBR document are available in the `/docs` folder of this repository.
 
-> **Note:** Setup instructions have been tested on macOS. For Windows and Linux, the overall steps are the same — refer to the official DigitalOcean documentation for platform-specific CLI installation.
+**Note:** Setup instructions have been tested on macOS. For Windows and Linux, the overall steps are the same — refer to the official DigitalOcean documentation for platform-specific CLI installation.
 
 ---
 
