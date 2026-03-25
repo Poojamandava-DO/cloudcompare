@@ -187,7 +187,7 @@ k6 run --vus 10 --duration 2m k6-load-test.js
 
 ### Load Test Results
 
-```
+
 █ TOTAL RESULTS
 
     checks_total........: 2313    26.696716/s
@@ -210,7 +210,7 @@ EXECUTION
 NETWORK
     data_received...............: 6.1 MB  70 kB/s
     data_sent...................: 184 kB  2.1 kB/s
-```
+
 
 | Metric | Result |
 |--------|--------|
@@ -220,7 +220,7 @@ NETWORK
 | p95 Response Time | 124.39ms |
 | Error Rate | 0% |
 | Total Requests | 1,542 (17.8 req/sec) |
-| Peak CPU | 360% |
+| Peak CPU | 195% |
 | HPA Scale Up | 2 → 5 pods automatically |
 | HPA Scale Down | 5 → 2 pods after load dropped |
 
