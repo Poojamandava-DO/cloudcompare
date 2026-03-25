@@ -223,7 +223,7 @@ data_sent...........: 184 kB  2.1 kB/s
 | HPA Scale Up | 2 → 5 pods automatically |
 | HPA Scale Down | 5 → 2 pods after load dropped |
 
-> HPA scaled from 2 to 5 pods automatically when CPU hit 360% — zero manual intervention required.
+HPA scaled from 2 to 5 pods automatically when CPU hit 360% — zero manual intervention required.
 
 ---
 
@@ -327,7 +327,7 @@ Verify rollout success
 
 Full setup guide and QBR document are available in the `/docs` folder of this repository.
 
-> **Note:** Setup instructions have been tested on macOS. For Windows and Linux, the overall steps are the same — refer to the official DigitalOcean documentation for platform-specific CLI installation.
+**Note:** Setup instructions have been tested on macOS. For Windows and Linux, the overall steps are the same — refer to the official DigitalOcean documentation for platform-specific CLI installation.
 
 ---
 
