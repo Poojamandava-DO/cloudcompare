@@ -328,6 +328,8 @@ Verify rollout success
 
 Full setup guide and QBR document are available in the `/docs` folder of this repository.
 
+> **Note:** Setup instructions have been tested on macOS. For Windows and Linux, the overall steps are the same — refer to the official DigitalOcean documentation for platform-specific CLI installation.
+
 ---
 
 ## Author
