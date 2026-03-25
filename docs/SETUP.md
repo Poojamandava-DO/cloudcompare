@@ -51,6 +51,7 @@ You will need:
 - Basic familiarity with the command line/terminal
 
 ---
+**Note:** Setup instructions have been tested on macOS. The steps and commands are the same across operating systems — only the CLI installation method may differ (e.g. Homebrew on macOS, apt on Linux, installer on Windows).
 
 ### Step 1: Install Tools
 
