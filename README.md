@@ -188,7 +188,7 @@ k6 run --vus 10 --duration 2m k6-load-test.js
 ### Load Test Results
 
 
-█ TOTAL RESULTS
+█TOTAL RESULTS
 
     checks_total........: 2313    26.696716/s
     checks_succeeded....: 100.00% 2313 out of 2313
