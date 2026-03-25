@@ -280,26 +280,27 @@ git push origin main
 
 ---
 
-### Step 12: Load Testing
+## Step 7: Load Testing
 ```bash
 # Install k6
 brew install k6
 
-# Run load test — 150 virtual users for 3 minutes
-k6 run --vus 150 --duration 3m k6-load-test.js
+# Run load test — 10 virtual users for 2 minutes
+k6 run --vus 10 --duration 2m k6-load-test.js
 
-# Watch HPA scale in real time (open new terminal tab)
+# Watch HPA scale in real time (open a new terminal tab)
 kubectl get hpa -n cloudcompare --watch
 ```
 
-**Expected HPA Behavior:**
+### Expected HPA Behavior
 ```
 TARGETS         REPLICAS
-cpu: 1%/60%     3        ← idle
-cpu: 54%/60%    3        ← load increasing
-cpu: 115%/60%   6        ← scaled up!
-cpu: 72%/60%    9        ← still scaling
-cpu: 1%/60%     3        ← scaled back down after load
+cpu: 1%/60%     2        ← idle baseline
+cpu: 54%/60%    2        ← load increasing
+cpu: 115%/60%   3        ← HPA triggered, scaling up
+cpu: 195%/60%   5        ← peak load, max pods reached
+cpu: 12%/60%    5        ← load dropping
+cpu: 1%/60%     2        ← scaled back down after load
 ```
 
 ---
