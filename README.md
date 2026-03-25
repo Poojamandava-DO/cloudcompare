@@ -187,29 +187,28 @@ k6 run --vus 10 --duration 2m k6-load-test.js
 
 ### Load Test Results
 
+```
+checks_total........: 2313     26.696716/s
+checks_succeeded....: 100.00%  2313 out of 2313
+checks_failed.......: 0.00%    0 out of 2313
 
-█ TOTAL RESULTS
-
-    checks_total........: 2313    26.696716/s
-    checks_succeeded....: 100.00% 2313 out of 2313
-    checks_failed.......: 0.00%   0 out of 2313
-
-    ✓ homepage status 200
-    ✓ compare status 200
-    ✓ savings returned
+✓ homepage status 200
+✓ compare status 200
+✓ savings returned
 
 HTTP
-    http_req_duration...........: avg=63.11ms  min=45.82ms  med=54.12ms  max=502.26ms  p(90)=100.01ms  p(95)=124.39ms
-    http_req_failed.............: 0.00%  0 out of 1542
-    http_reqs...................: 1542   17.797811/s
+http_req_duration...: avg=63.11ms min=45.82ms med=54.12ms max=502.26ms p(95)=124.39ms
+http_req_failed.....: 0.00%   0 out of 1542
+http_reqs...........: 1542    17.797811/s
 
 EXECUTION
-    vus.........................: 10     min=10  max=10
-    iterations..................: 765    8.829653/s
+vus.................: 10      min=10 max=10
+iterations..........: 765     8.829653/s
 
 NETWORK
-    data_received...............: 6.1 MB  70 kB/s
-    data_sent...................: 184 kB  2.1 kB/s
+data_received.......: 6.1 MB  70 kB/s
+data_sent...........: 184 kB  2.1 kB/s
+```
 
 
 | Metric | Result |
