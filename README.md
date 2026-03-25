@@ -285,7 +285,7 @@ Verify rollout success
 ```
 
 **Required GitHub Secret:**
-- `DIGITALOCEAN_ACCESS_TOKEN` — your DO API token (Settings → Secrets → Actions)
+- DIGITALOCEAN_ACCESS_TOKEN — your DO API token (Settings → Secrets → Actions)
 
 ---
 
@@ -299,7 +299,7 @@ Verify rollout success
 | Control Plane | Free | $73/mo | $73/mo |
 | **Total** | **$41/mo** | **$262/mo** | **$221/mo (84%)** |
 
-> HPA scales pods down during off-peak hours — you only pay for compute you actually use.
+HPA scales pods down during off-peak hours — you only pay for compute you actually use.
 
 ---
 
