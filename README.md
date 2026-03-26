@@ -303,7 +303,7 @@ Verify rollout success
 ```
 
 **Required GitHub Secret:**
-- `DIGITALOCEAN_ACCESS_TOKEN` — your DO API token (Settings → Secrets → Actions)
+- DIGITALOCEAN_ACCESS_TOKEN — your DO API token (Settings → Secrets → Actions)
 
 ---
 

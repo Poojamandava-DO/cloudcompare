@@ -22,7 +22,7 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Build Docker image
-        run: docker build -t registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest .
+        run: docker build --platform linux/amd64 -t registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest .
 
       - name: Push Docker image to DOCR
         run: docker push registry.digitalocean.com/cloudcompare-registry/cloudcompare:latest
