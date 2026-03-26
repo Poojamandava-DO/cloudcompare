@@ -192,9 +192,21 @@ checks_total........: 2313     26.696716/s
 checks_succeeded....: 100.00%  2313 out of 2313
 checks_failed.......: 0.00%    0 out of 2313
 
+<<<<<<< HEAD
 ✓ homepage status 200
 ✓ compare status 200
 ✓ savings returned
+=======
+█TOTAL RESULTS
+
+    checks_total........: 2313    26.696716/s
+    checks_succeeded....: 100.00% 2313 out of 2313
+    checks_failed.......: 0.00%   0 out of 2313
+
+    ✓ homepage status 200
+    ✓ compare status 200
+    ✓ savings returned
+>>>>>>> eec49fbe889e47c7723c9f3c45ca66fe9d8ae320
 
 HTTP
 http_req_duration...: avg=63.11ms min=45.82ms med=54.12ms max=502.26ms p(95)=124.39ms
@@ -206,10 +218,16 @@ vus.................: 10      min=10 max=10
 iterations..........: 765     8.829653/s
 
 NETWORK
+<<<<<<< HEAD
 data_received.......: 6.1 MB  70 kB/s
 data_sent...........: 184 kB  2.1 kB/s
 ```
 
+=======
+    data_received...............: 6.1 MB  70 kB/s
+    data_sent...................: 184 kB  2.1 kB/s
+```
+>>>>>>> eec49fbe889e47c7723c9f3c45ca66fe9d8ae320
 
 | Metric | Result |
 |--------|--------|
@@ -223,7 +241,7 @@ data_sent...........: 184 kB  2.1 kB/s
 | HPA Scale Up | 2 → 5 pods automatically |
 | HPA Scale Down | 5 → 2 pods after load dropped |
 
-> HPA scaled from 2 to 5 pods automatically when CPU hit 360% — zero manual intervention required.
+HPA scaled from 2 to 5 pods automatically when CPU hit 360% — zero manual intervention required.
 
 ---
 
@@ -299,7 +317,7 @@ Verify rollout success
 | Control Plane | Free | $73/mo | $73/mo |
 | **Total** | **$41/mo** | **$262/mo** | **$221/mo (84%)** |
 
-> HPA scales pods down during off-peak hours — you only pay for compute you actually use.
+HPA scales pods down during off-peak hours — you only pay for compute you actually use.
 
 ---
 
@@ -327,7 +345,7 @@ Verify rollout success
 
 Full setup guide and QBR document are available in the `/docs` folder of this repository.
 
-> **Note:** Setup instructions have been tested on macOS. For Windows and Linux, the overall steps are the same — refer to the official DigitalOcean documentation for platform-specific CLI installation.
+**Note:** Setup instructions have been tested on macOS. For Windows and Linux, the overall steps are the same — refer to the official DigitalOcean documentation for platform-specific CLI installation.
 
 ---
 
